@@ -1,0 +1,56 @@
+{
+        "AppLogger": {
+            "LEVEL": 4,
+            "FILENAME": "storage\\log\\app.log",
+            "APPNAME": "IronportEnriched",
+            "RemoteLogging": {
+                    "TYPE": "UDP",
+                    "PORT": 514,
+                    "BINDADDRESS": "127.0.0.1",
+                    "SYSLOGFORMAT": "RFC3164"
+                },
+        },
+    "Emitter": {
+            "QUEUESIZE": 256,
+            "TYPE": "UDP",
+            "PORT": 514,
+            "BINDADDRESS": "127.0.0.1",
+            "SYSLOGFORMAT": "RFC3164"
+        },
+    "DbWorker": {
+            "FILENAME": "storage\\db\\database.sqlite",
+            "GARBAGETIMEOUTMIN": 1,
+            "REGULARDUMPINGSEC": 10
+        },
+    "Receiver": {
+            "QUEUESIZE": 256,
+            "TYPE": "UDP",
+            "PORT": 1518,
+            "BINDADDRESS": "127.0.0.1",
+            "SYSLOGFORMAT": "RFC3164"
+        },
+    "Parser": {
+            "QUEUESIZE": 256,
+            "Mapping": {
+                    "MSGMERGE": "MID (\\d+)",
+                    "MsgType": {
+                            "START": "Start MID \\d+ ICID \\d+",
+                            "STOP": null,
+                            "TRIGGER": null
+                        },
+                    "MsgBlacklist": [
+                            "MID \\d+ URL (http|ftp)"
+                        ],
+                    "MsgData": {
+                            "from": "ICID \\d+ From: <([^>]+)>",
+                            "to": "ICID \\d+ RID \\d+ To: <([^>]+)>",
+                            "payload": "MID \\d+( .*)$"
+                        },
+                    "MsgMetadata": {
+                            "Hostname": ""
+                        },
+                    "MSGKEY": "hostname,id",
+                    "MSGDATAENRICH": null
+                }
+        }
+}
